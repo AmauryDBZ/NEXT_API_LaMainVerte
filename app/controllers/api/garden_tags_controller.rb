@@ -1,4 +1,4 @@
-class GardenTagsController < ApplicationController
+class Api::GardenTagsController < ApplicationController
   before_action :set_garden_tag, only: [:show, :update, :destroy]
 
   # GET /garden_tags
@@ -18,7 +18,7 @@ class GardenTagsController < ApplicationController
     @garden_tag = GardenTag.new(garden_tag_params)
 
     if @garden_tag.save
-      render json: @garden_tag, status: :created, location: @garden_tag
+      render json: @garden_tag, status: :created, location: @api_garden_tag
     else
       render json: @garden_tag.errors, status: :unprocessable_entity
     end

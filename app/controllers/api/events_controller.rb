@@ -1,9 +1,13 @@
-class EventsController < ApplicationController
+class Api::EventsController < ApplicationController
   before_action :set_event, only: [:show, :update, :destroy]
 
   # GET /events
   def index
-    @events = Event.all
+    if params[:garden_id]
+      @events = Garden.find(params[:garden_id]).events
+    else
+      @events = Event.all
+    end
 
     render json: @events
   end
@@ -18,7 +22,7 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
 
     if @event.save
-      render json: @event, status: :created, location: @event
+      render json: @event, status: :created, location: @api_event
     else
       render json: @event.errors, status: :unprocessable_entity
     end

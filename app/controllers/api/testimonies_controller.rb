@@ -1,4 +1,4 @@
-class TestimoniesController < ApplicationController
+class Api::TestimoniesController < ApplicationController
   before_action :set_testimony, only: [:show, :update, :destroy]
 
   # GET /testimonies
@@ -18,7 +18,7 @@ class TestimoniesController < ApplicationController
     @testimony = Testimony.new(testimony_params)
 
     if @testimony.save
-      render json: @testimony, status: :created, location: @testimony
+      render json: @testimony, status: :created, location: @api_testimony
     else
       render json: @testimony.errors, status: :unprocessable_entity
     end

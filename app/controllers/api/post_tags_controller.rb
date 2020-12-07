@@ -1,4 +1,4 @@
-class PostTagsController < ApplicationController
+class Api::PostTagsController < ApplicationController
   before_action :set_post_tag, only: [:show, :update, :destroy]
 
   # GET /post_tags
@@ -18,7 +18,7 @@ class PostTagsController < ApplicationController
     @post_tag = PostTag.new(post_tag_params)
 
     if @post_tag.save
-      render json: @post_tag, status: :created, location: @post_tag
+      render json: @post_tag, status: :created, location: @api_post_tag
     else
       render json: @post_tag.errors, status: :unprocessable_entity
     end

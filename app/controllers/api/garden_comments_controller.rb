@@ -1,9 +1,13 @@
-class GardenCommentsController < ApplicationController
+class Api::GardenCommentsController < ApplicationController
   before_action :set_garden_comment, only: [:show, :update, :destroy]
 
   # GET /garden_comments
   def index
-    @garden_comments = GardenComment.all
+    if params[:garden_id]
+      @garden_comments = GardenComment.find_by(garden_id: params[:garden_id])
+    else
+      @garden_comments = GardenComment.all
+    end
 
     render json: @garden_comments
   end
@@ -18,7 +22,7 @@ class GardenCommentsController < ApplicationController
     @garden_comment = GardenComment.new(garden_comment_params)
 
     if @garden_comment.save
-      render json: @garden_comment, status: :created, location: @garden_comment
+      render json: @garden_comment, status: :created, location: @api_garden_comment
     else
       render json: @garden_comment.errors, status: :unprocessable_entity
     end

@@ -1,9 +1,13 @@
-class CountriesController < ApplicationController
+class Api::CountriesController < ApplicationController
   before_action :set_country, only: [:show, :update, :destroy]
 
   # GET /countries
   def index
-    @countries = Country.all
+    if params[:garden_id]
+      @countries = Garden.find(garden_id).location.country
+    else
+      @countries = Country.all
+    end
 
     render json: @countries
   end
@@ -18,7 +22,7 @@ class CountriesController < ApplicationController
     @country = Country.new(country_params)
 
     if @country.save
-      render json: @country, status: :created, location: @country
+      render json: @country, status: :created, location: @api_country
     else
       render json: @country.errors, status: :unprocessable_entity
     end

@@ -1,4 +1,4 @@
-class LocationsController < ApplicationController
+class Api::LocationsController < ApplicationController
   before_action :set_location, only: [:show, :update, :destroy]
 
   # GET /locations
@@ -18,7 +18,7 @@ class LocationsController < ApplicationController
     @location = Location.new(location_params)
 
     if @location.save
-      render json: @location, status: :created, location: @location
+      render json: @location, status: :created, location: @api_location
     else
       render json: @location.errors, status: :unprocessable_entity
     end

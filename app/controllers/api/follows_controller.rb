@@ -1,9 +1,13 @@
-class FollowsController < ApplicationController
+class Api::FollowsController < ApplicationController
   before_action :set_follow, only: [:show, :update, :destroy]
 
   # GET /follows
   def index
-    @follows = Follow.all
+    if params[:user_id]
+      @follows = User.find(params[:user_id]).follows
+    else
+      @follows = Follow.all
+    end
 
     render json: @follows
   end
@@ -18,7 +22,7 @@ class FollowsController < ApplicationController
     @follow = Follow.new(follow_params)
 
     if @follow.save
-      render json: @follow, status: :created, location: @follow
+      render json: @follow, status: :created, location: @api_follow
     else
       render json: @follow.errors, status: :unprocessable_entity
     end

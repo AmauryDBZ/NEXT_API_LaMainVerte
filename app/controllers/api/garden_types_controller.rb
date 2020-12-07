@@ -1,9 +1,13 @@
-class GardenTypesController < ApplicationController
+class Api::GardenTypesController < ApplicationController
   before_action :set_garden_type, only: [:show, :update, :destroy]
 
   # GET /garden_types
   def index
-    @garden_types = GardenType.all
+    if params[:garden_id]
+      @garden_types = Garden.find(params[:garden_id]).garden_type
+    else
+      @garden_types = GardenType.all
+    end
 
     render json: @garden_types
   end
@@ -18,7 +22,7 @@ class GardenTypesController < ApplicationController
     @garden_type = GardenType.new(garden_type_params)
 
     if @garden_type.save
-      render json: @garden_type, status: :created, location: @garden_type
+      render json: @garden_type, status: :created, location: @api_garden_type
     else
       render json: @garden_type.errors, status: :unprocessable_entity
     end

@@ -1,4 +1,4 @@
-class PostCommentsController < ApplicationController
+class Api::PostCommentsController < ApplicationController
   before_action :set_post_comment, only: [:show, :update, :destroy]
 
   # GET /post_comments
@@ -18,7 +18,7 @@ class PostCommentsController < ApplicationController
     @post_comment = PostComment.new(post_comment_params)
 
     if @post_comment.save
-      render json: @post_comment, status: :created, location: @post_comment
+      render json: @post_comment, status: :created, location: @api_post_comment
     else
       render json: @post_comment.errors, status: :unprocessable_entity
     end

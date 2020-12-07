@@ -1,4 +1,4 @@
-class TagsController < ApplicationController
+class Api::TagsController < ApplicationController
   before_action :set_tag, only: [:show, :update, :destroy]
 
   # GET /tags
@@ -18,7 +18,7 @@ class TagsController < ApplicationController
     @tag = Tag.new(tag_params)
 
     if @tag.save
-      render json: @tag, status: :created, location: @tag
+      render json: @tag, status: :created, location: @api_tag
     else
       render json: @tag.errors, status: :unprocessable_entity
     end
