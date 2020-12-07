@@ -3,13 +3,19 @@ class Api::GardenTypesController < ApplicationController
 
   # GET /garden_types
   def index
-    if params[:garden_id]
-      @garden_types = Garden.find(params[:garden_id]).garden_type
+    if params[:user_id] && params[:garden_id]
+      if Garden.find(params[:garden_id]).user_id.to_i != params[:user_id].to_i
+
+        render json: {error: "This garden doesn't exist or wasn't created by this user"}, status: 404
+      else 
+        @garden_types = Garden.find(params[:garden_id]).garden_type
+        render json: @garden_types
+      end
     else
       @garden_types = GardenType.all
+      
+      render json: @garden_types
     end
-
-    render json: @garden_types
   end
 
   # GET /garden_types/1

@@ -3,13 +3,20 @@ class Api::EventsController < ApplicationController
 
   # GET /events
   def index
-    if params[:garden_id]
-      @events = Garden.find(params[:garden_id]).events
+    if params[:user_id] && params[:garden_id]
+      if Garden.find(params[:garden_id]).user_id.to_i != params[:user_id].to_i
+
+        render json: {error: "This garden doesn't exist or wasn't created by this user"}, status: 404
+      else 
+        @events = Garden.find(params[:garden_id]).events
+
+        render json: @events
+      end
     else
       @events = Event.all
+      
+      render json: @events
     end
-
-    render json: @events
   end
 
   # GET /events/1

@@ -3,13 +3,20 @@ class Api::GardenCommentsController < ApplicationController
 
   # GET /garden_comments
   def index
-    if params[:garden_id]
-      @garden_comments = GardenComment.find_by(garden_id: params[:garden_id])
+    if params[:user_id] && params[:garden_id]
+      if Garden.find(params[:garden_id]).user_id.to_i != params[:user_id].to_i
+
+        render json: {error: "This garden doesn't exist or wasn't created by this user"}, status: 404
+      else 
+        @garden_comments = GardenComment.find_by(garden_id: params[:garden_id])
+
+        render json: @garden_comments
+      end
     else
       @garden_comments = GardenComment.all
+      
+      render json: @garden_comments
     end
-
-    render json: @garden_comments
   end
 
   # GET /garden_comments/1

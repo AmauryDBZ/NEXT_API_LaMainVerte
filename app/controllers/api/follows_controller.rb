@@ -4,12 +4,21 @@ class Api::FollowsController < ApplicationController
   # GET /follows
   def index
     if params[:user_id]
-      @follows = User.find(params[:user_id]).follows
+      if params[:garden_id]
+        if Garden.find(params[:garden_id]).user_id.to_i != params[:user_id].to_i
+
+          render json: {error: "This garden doesn't exist or wasn't created by this user"}, status: 404
+        end
+      else
+        @follows = User.find(params[:user_id]).follows
+
+        render json: @follows
+      end
     else
       @follows = Follow.all
+      
+      render json: @follows
     end
-
-    render json: @follows
   end
 
   # GET /follows/1

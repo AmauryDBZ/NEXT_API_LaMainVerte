@@ -3,9 +3,20 @@ class Api::LocationsController < ApplicationController
 
   # GET /locations
   def index
-    @locations = Location.all
+    if params[:user_id] && params[:garden_id]
+      if Garden.find(params[:garden_id]).user_id.to_i != params[:user_id].to_i
 
-    render json: @locations
+        render json: {error: "This garden doesn't exist or wasn't created by this user"}, status: 404
+      else 
+        @locations = Garden.find(params[:garden_id]).location
+
+        render json: @locations
+      end
+    else
+      @garden_types = GardenType.all
+      
+      render json: @garden_types
+    end
   end
 
   # GET /locations/1

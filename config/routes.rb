@@ -28,6 +28,11 @@ Rails.application.routes.draw do
         resources :countries
         resources :locations
         resources :climates
+        resources :follows
+        resources :posts do
+          resources :tags
+          resources :post_comments
+        end
       end
       resources :posts do
         resources :tags

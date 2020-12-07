@@ -3,13 +3,21 @@ class Api::CountriesController < ApplicationController
 
   # GET /countries
   def index
-    if params[:garden_id]
-      @countries = Garden.find(garden_id).location.country
+    if params[:user_id] && params[:garden_id]
+      if Garden.find(params[:garden_id]).user_id.to_i != params[:user_id].to_i
+
+        render json: {error: "This garden doesn't exist or wasn't created by this user"}, status: 404
+      else 
+        @countries = Garden.find(params[:garden_id]).location.country
+
+        render json: @countries
+      end
     else
-      @countries = Country.all
+        @countries = Climate.all
+        
+        render json: @countries
     end
 
-    render json: @countries
   end
 
   # GET /countries/1
