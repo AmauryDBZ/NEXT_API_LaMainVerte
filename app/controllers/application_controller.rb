@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-class ApplicationController < ActionController::API
-=======
 class ApplicationController < ActionController::API #tuto= ::Base
 
   def render_jsonapi_response(resource)
@@ -11,5 +8,4 @@ class ApplicationController < ActionController::API #tuto= ::Base
     end
   end
 
->>>>>>> master
 end
