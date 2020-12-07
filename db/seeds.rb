@@ -123,7 +123,7 @@ end
 3.times do
     GardenTag.create(
       garden: Garden.all.sample,
-      tag: Tag.all.sample'
+      tag: Tag.all.sample
     )
 end
 
