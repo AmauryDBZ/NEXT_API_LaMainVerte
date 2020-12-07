@@ -1,4 +1,3 @@
-require "faker"
 Faker::Config.locale = 'fr'
 
 User.delete_all
