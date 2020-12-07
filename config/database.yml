@@ -23,21 +23,13 @@ default: &default
 
 development:
   <<: *default
-<<<<<<< HEAD
   database: API_la_main_verte_development
-=======
-  database: thp_gram_development
->>>>>>> master
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
   # the same name as the operating system user that initialized the database.
-<<<<<<< HEAD
   #username: API_la_main_verte
-=======
-  #username: thp_gram
->>>>>>> master
 
   # The password associated with the postgres role (username).
   #password:
@@ -65,11 +57,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-<<<<<<< HEAD
   database: API_la_main_verte_test
-=======
-  database: thp_gram_test
->>>>>>> master
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -92,12 +80,6 @@ test:
 #
 production:
   <<: *default
-<<<<<<< HEAD
   database: API_la_main_verte_production
   username: API_la_main_verte
   password: <%= ENV['API_LA_MAIN_VERTE_DATABASE_PASSWORD'] %>
-=======
-  database: thp_gram_production
-  username: thp_gram
-  password: <%= ENV['THP_GRAM_DATABASE_PASSWORD'] %>
->>>>>>> master
