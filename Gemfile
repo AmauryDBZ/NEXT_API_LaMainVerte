@@ -8,6 +8,7 @@ gem 'dotenv-rails'
 gem 'rack-cors'
 gem 'jsonapi-rails'
 gem 'table_print'
+gem 'activerecord-reset-pk-sequence'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.4'
