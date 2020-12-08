@@ -67,7 +67,7 @@ class Api::GardenTagsController < ApplicationController
       if current_user.is_admin || current_user.id == Garden.find(params[:garden_id]).user_id
         return true
       else
-        render json: {error: "You cannot create a tag if you are not the garden's owner or an administrator."}, status: :unauthorized
+        render json: {error: "You cannot add a tag if you are not the garden's owner or an administrator."}, status: :unauthorized
       end
     end
 end

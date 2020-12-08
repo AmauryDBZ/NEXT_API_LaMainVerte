@@ -1,5 +1,7 @@
 class Api::TestimoniesController < ApplicationController
   before_action :set_testimony, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_owner_or_admin, only: [:destroy, :update]
 
   # GET /testimonies
   def index
@@ -22,6 +24,7 @@ class Api::TestimoniesController < ApplicationController
   # POST /testimonies
   def create
     @testimony = Testimony.new(testimony_params)
+    @testimony.user_id = current_user.id
 
     if @testimony.save
       render json: @testimony, status: :created, location: @api_testimony
@@ -53,5 +56,13 @@ class Api::TestimoniesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def testimony_params
       params.require(:testimony).permit(:content)
+    end
+
+    def is_owner_or_admin
+      if current_user.is_admin || current_user.id == @testimony.user_id
+        return true
+      else
+        render json: {error: "You cannot edit/delete a testimony if you are not its owner or an administrator."}, status: :unauthorized
+      end
     end
 end

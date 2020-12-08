@@ -1,5 +1,8 @@
 class Api::PostTagsController < ApplicationController
   before_action :set_post_tag, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_owner_or_admin, only: [:destroy, :update]
+  before_action :can_I_create, only: [:create]
 
   # GET /post_tags
   def index
@@ -33,6 +36,7 @@ class Api::PostTagsController < ApplicationController
   # POST /post_tags
   def create
     @post_tag = PostTag.new(post_tag_params)
+    @post_tag.post_id = Post.find(params[:post_id]).id
 
     if @post_tag.save
       render json: @post_tag, status: :created, location: @api_post_tag
@@ -63,6 +67,22 @@ class Api::PostTagsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def post_tag_params
-      params.fetch(:post_tag, {})
+      params.require(:post_tag).permit(:tag_id)
+    end
+
+    def is_owner_or_admin
+      if current_user.is_admin || current_user.id == @post_tag.post.garden.user_id
+        return true
+      else
+        render json: {error: "You cannot update/delete a tag if you are not the post's owner or an administrator."}, status: :unauthorized
+      end
+    end
+
+    def can_I_create
+      if current_user.is_admin || current_user.id == Post.find(params[:post_id]).garden.user_id
+        return true
+      else
+        render json: {error: "You cannot add a tag if you are not the post's owner or an administrator."}, status: :unauthorized
+      end
     end
 end

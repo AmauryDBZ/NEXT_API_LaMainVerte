@@ -1,5 +1,7 @@
 class Api::TagsController < ApplicationController
   before_action :set_tag, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_admin, only: [:create, :update, :destroy]
 
   # GET /tags
   def index
@@ -64,5 +66,13 @@ class Api::TagsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def tag_params
       params.require(:tag).permit(:name)
+    end
+
+    def is_admin
+      if current_user.is_admin
+        return true
+      else
+        render json: {error: "You have to be an administrator to do this stuff"}, status: :unauthorized
+      end
     end
 end

@@ -4,19 +4,23 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     
-    resources :testimonies, only: [:index, :show]
+    resources :testimonies
     resources :follows
     resources :countries
     resources :locations
     resources :climates
     resources :garden_types
     resources :post_tags
+    resources :post_comments
     resources :garden_tags
     resources :tags
     resources :events
-    resources :post_comments, only: [:index, :show]
     resources :garden_comments, only: [:index, :show]
-    resources :posts, only: [:index, :show]
+    resources :posts, only: [:index, :show] do
+      resources :post_comments
+      resources :tags
+      resources :post_tags
+    end
     resources :gardens  do
       resources :garden_comments
       resources :garden_tags

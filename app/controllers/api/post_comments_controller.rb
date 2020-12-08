@@ -1,5 +1,7 @@
 class Api::PostCommentsController < ApplicationController
   before_action :set_post_comment, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_owner_or_admin, only: [:destroy, :update]
 
   # GET /post_comments
   def index
@@ -33,6 +35,8 @@ class Api::PostCommentsController < ApplicationController
   # POST /post_comments
   def create
     @post_comment = PostComment.new(post_comment_params)
+    @post_comment.user_id = current_user.id
+    @post_comment.post_id = Post.find(params[:post_id]).id
 
     if @post_comment.save
       render json: @post_comment, status: :created, location: @api_post_comment
@@ -64,5 +68,13 @@ class Api::PostCommentsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def post_comment_params
       params.require(:post_comment).permit(:content)
+    end
+
+    def is_owner_or_admin
+      if current_user.is_admin || current_user.id == @post_comment.user_id
+        return true
+      else
+        render json: {error: "You cannot edit/delete a comment if you are not its owner or an administrator."}, status: :unauthorized
+      end
     end
 end

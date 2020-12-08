@@ -1,5 +1,7 @@
 class Api::LocationsController < ApplicationController
   before_action :set_location, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_admin, only: [:destroy, :update, :create]
 
   # GET /locations
   def index
@@ -58,6 +60,14 @@ class Api::LocationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def location_params
-      params.require(:location).permit(:name, :lat, :long)
+      params.require(:location).permit(:name, :lat, :long, :country_id)
+    end
+
+    def is_admin
+      if current_user.is_admin
+        return true
+      else
+        render json: {error: "You cannot add/edit/delete a location if you are not an administrator."}, status: :unauthorized
+      end
     end
 end

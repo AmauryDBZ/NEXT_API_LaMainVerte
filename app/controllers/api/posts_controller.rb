@@ -1,5 +1,7 @@
 class Api::PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_owner_or_admin, only: [:destroy, :update]
 
   # GET /posts
   def index
@@ -29,6 +31,7 @@ class Api::PostsController < ApplicationController
   # POST /posts
   def create
     @post = Post.new(post_params)
+    @post.garden_id = Garden.find(params[:garden_id]).id
 
     if @post.save
       render json: @post, status: :created, location: @api_post
@@ -60,5 +63,13 @@ class Api::PostsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def post_params
       params.require(:post).permit(:title, :content)
+    end
+
+    def is_owner_or_admin
+      if current_user.is_admin || current_user.id == @post.garden.user_id
+        return true
+      else
+        render json: {error: "You cannot edit/delete a post if you are not the owner or an administrator."}, status: :unauthorized
+      end
     end
 end

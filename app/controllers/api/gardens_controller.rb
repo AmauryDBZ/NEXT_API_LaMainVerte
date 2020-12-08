@@ -72,7 +72,7 @@ class Api::GardensController < ApplicationController
       if current_user.is_admin || current_user.id == @garden.user_id
         return true
       else
-        render json: {error: "You cannot edit/delete a type of garden if you are not an administrator."}, status: :unauthorized
+        render json: {error: "You cannot edit/delete a garden if you are not the owner or an administrator."}, status: :unauthorized
       end
     end
 end
