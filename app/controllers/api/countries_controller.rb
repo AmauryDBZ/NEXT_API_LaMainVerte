@@ -22,7 +22,16 @@ class Api::CountriesController < ApplicationController
 
   # GET /countries/1
   def show
-    render json: @country
+    @locations = Location.where(country: @country)
+    @gardens = Array.new
+    Garden.all.each do |garden|
+      if garden.location.country == @country
+        @gardens << garden
+      end
+    end
+    
+
+    render json: {"country" => @country, "locations" => @locations, "gardens" => @gardens}
   end
 
   # POST /countries

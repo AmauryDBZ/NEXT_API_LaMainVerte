@@ -27,7 +27,7 @@ class Api::TagsController < ApplicationController
 
   # GET /tags/1
   def show
-    render json: @tag
+    render json: {"tag" => @tag, "gardens" => @tag.gardens, "posts" => @tag.posts}
   end
 
   # POST /tags

@@ -21,7 +21,8 @@ class Api::EventsController < ApplicationController
 
   # GET /events/1
   def show
-    render json: @event
+
+    render json: {"event" => @event, "garden" => @event.garden, "user" => @event.garden.user}
   end
 
   # POST /events

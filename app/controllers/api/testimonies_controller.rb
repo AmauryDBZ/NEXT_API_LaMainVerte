@@ -16,7 +16,7 @@ class Api::TestimoniesController < ApplicationController
 
   # GET /testimonies/1
   def show
-    render json: @testimony
+    render json: {"testimony" => @testimony, "user" => @testimony.user}
   end
 
   # POST /testimonies

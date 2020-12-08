@@ -14,7 +14,19 @@ class Api::GardensController < ApplicationController
 
   # GET /gardens/1
   def show
-    render json: @garden
+    @followers = Array.new
+    Follow.all.each do |follow|
+      if follow.garden == @garden
+        @followers << follow.user
+      end
+    end
+
+    render json: {"garden" => @garden,
+      "user" => @garden.user,
+      "followers" => @followers,
+      "posts" => @garden.posts,
+      "events" => @garden.events,
+      "comments" => @garden.garden_comments}
   end
 
   # POST /gardens

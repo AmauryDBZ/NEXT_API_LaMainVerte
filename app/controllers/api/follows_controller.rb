@@ -23,7 +23,7 @@ class Api::FollowsController < ApplicationController
 
   # GET /follows/1
   def show
-    render json: @follow
+    render json: {"follow" => @follow, "garden" => @follow.garden, "follower" => @follow.user}
   end
 
   # POST /follows

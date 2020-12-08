@@ -21,7 +21,9 @@ class Api::PostsController < ApplicationController
 
   # GET /posts/1
   def show
-    render json: @post
+    puts (@post.tags)
+
+    render json: {"post" => @post, "user" => @post.garden.user, "garden" => @post.garden, "tags" => @post.tags }
   end
 
   # POST /posts

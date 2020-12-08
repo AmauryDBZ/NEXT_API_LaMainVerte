@@ -69,7 +69,7 @@ end
 # COUNTRY
 3.times do
   Country.create(
-   name: Faker::Address.country 
+  name: Faker::Address.country 
   )
 end
 
@@ -121,7 +121,7 @@ end
 end
 
 # GARGEN TAG
-3.times do
+10.times do
     GardenTag.create(
       garden: Garden.all.sample,
       tag: Tag.all.sample
@@ -129,7 +129,7 @@ end
 end
 
 # POST TAG
-3.times do
+10.times do
   PostTag.create(
     post: Post.all.sample,
     tag: Tag.all.sample

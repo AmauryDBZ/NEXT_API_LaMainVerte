@@ -21,7 +21,7 @@ class Api::GardenCommentsController < ApplicationController
 
   # GET /garden_comments/1
   def show
-    render json: @garden_comment
+    render json: {"garden_comment" => @garden_comment, "user" => @garden_comment.user, "garden" => @garden_comment.garden}
   end
 
   # POST /garden_comments

@@ -7,7 +7,19 @@ class Api::UsersController < Api::BaseController
   end
 
   def show
-    render_jsonapi_response(@user)
+    @posts = Array.new
+    @user.gardens.each do |garden|
+      @posts << garden.posts
+    end
+
+    render json: {
+      "user" => @user,
+      "gardens" => @user.gardens,
+      "posts" => @posts.flatten,
+      "post_comments" => @user.post_comments,
+      "garden_comments" => @user.garden_comments,
+      "testimonies" => @user.testimonies
+    }
   end
 
   def update

@@ -10,7 +10,7 @@ class Api::GardenTagsController < ApplicationController
 
   # GET /garden_tags/1
   def show
-    render json: @garden_tag
+    render json: {"garden_tag" => @garden_tag, "tag" => @garden_tag.tag, "garden" => @garden_tag.garden}
   end
 
   # POST /garden_tags

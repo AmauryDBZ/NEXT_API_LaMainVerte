@@ -27,7 +27,7 @@ class Api::PostCommentsController < ApplicationController
 
   # GET /post_comments/1
   def show
-    render json: @post_comment
+    render json: {"post_comment" => @post_comment, "user" => @post_comment.user, "post" => @post_comment.post}
   end
 
   # POST /post_comments

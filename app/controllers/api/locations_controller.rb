@@ -21,7 +21,8 @@ class Api::LocationsController < ApplicationController
 
   # GET /locations/1
   def show
-    render json: @location
+    @gardens = Garden.where(location: @location)
+    render json: {"location" => @location, "country" => @location.country, "gardens" => @gardens}
   end
 
   # POST /locations

@@ -20,7 +20,9 @@ class Api::GardenTypesController < ApplicationController
 
   # GET /garden_types/1
   def show
-    render json: @garden_type
+    @gardens = Garden.where(garden_type: @garden_type)
+    
+    render json: {"garden_type" => @garden_type, "gardens" => @gardens}
   end
 
   # POST /garden_types
