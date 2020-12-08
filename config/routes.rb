@@ -16,14 +16,17 @@ Rails.application.routes.draw do
     resources :tags
     resources :events
     resources :garden_comments, only: [:index, :show]
+    
     resources :posts, only: [:index, :show] do
       resources :post_comments
       resources :tags
       resources :post_tags
     end
+
     resources :gardens  do
       resources :garden_comments
       resources :garden_tags
+      resources :events
       resources :posts do
         resources :tags
         resources :post_comments
