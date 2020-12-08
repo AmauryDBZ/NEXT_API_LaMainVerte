@@ -10,8 +10,12 @@ class Api::UsersController < Api::BaseController
 
   def show
     @posts = Array.new
+    @follows = Array.new
     @user.gardens.each do |garden|
       @posts << garden.posts
+    end
+    @user.follows.each do |follow|
+      @follows << follow.garden
     end
 
     render json: {
@@ -20,7 +24,8 @@ class Api::UsersController < Api::BaseController
       "posts" => @posts.flatten,
       "post_comments" => @user.post_comments,
       "garden_comments" => @user.garden_comments,
-      "testimonies" => @user.testimonies
+      "testimonies" => @user.testimonies,
+      "follows" => @follows
     }
   end
 
