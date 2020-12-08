@@ -1,5 +1,9 @@
 class Api::GardenTagsController < ApplicationController
   before_action :set_garden_tag, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_owner_or_admin, only: [:destroy, :update]
+  before_action :can_I_create, only: [:create]
+
 
   # GET /garden_tags
   def index
@@ -16,6 +20,7 @@ class Api::GardenTagsController < ApplicationController
   # POST /garden_tags
   def create
     @garden_tag = GardenTag.new(garden_tag_params)
+    @garden_tag.garden_id = Garden.find(params[:garden_id]).id
 
     if @garden_tag.save
       render json: @garden_tag, status: :created, location: @api_garden_tag
@@ -24,6 +29,7 @@ class Api::GardenTagsController < ApplicationController
     end
   end
 
+  
   # PATCH/PUT /garden_tags/1
   def update
     if @garden_tag.update(garden_tag_params)
@@ -46,6 +52,22 @@ class Api::GardenTagsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def garden_tag_params
-      params.fetch(:garden_tag, {})
+      params.require(:garden_tag).permit(:tag_id)
+    end
+
+    def is_owner_or_admin
+      if current_user.is_admin || current_user.id == @garden_tag.garden.user_id
+        return true
+      else
+        render json: {error: "You cannot update/delete a tag if you are not the garden's owner or an administrator."}, status: :unauthorized
+      end
+    end
+
+    def can_I_create
+      if current_user.is_admin || current_user.id == Garden.find(params[:garden_id]).user_id
+        return true
+      else
+        render json: {error: "You cannot create a tag if you are not the garden's owner or an administrator."}, status: :unauthorized
+      end
     end
 end

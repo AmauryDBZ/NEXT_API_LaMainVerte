@@ -1,5 +1,7 @@
 class Api::GardenTypesController < ApplicationController
   before_action :set_garden_type, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_admin, only: [:destroy, :update, :create]
 
   # GET /garden_types
   def index
@@ -59,5 +61,13 @@ class Api::GardenTypesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def garden_type_params
       params.require(:garden_type).permit(:name)
+    end
+
+    def is_admin
+      if current_user.is_admin
+        return true
+      else
+        render json: {error: "You cannot add/edit/delete a type of garden if you are not an administrator."}, status: :unauthorized
+      end
     end
 end

@@ -14,26 +14,28 @@ Rails.application.routes.draw do
     resources :garden_tags
     resources :tags
     resources :events
-    resources :post_comments
-    resources :garden_comments
+    resources :post_comments, only: [:index, :show]
+    resources :garden_comments, only: [:index, :show]
     resources :posts, only: [:index, :show]
-    resources :gardens, only: [:show, :index]
+    resources :gardens  do
+      resources :garden_comments
+      resources :garden_tags
+      resources :posts do
+        resources :tags
+        resources :post_comments
+      end
+    end
 
     resources :users do 
       resources :gardens do
         resources :tags
-        resources :garden_comments
         resources :garden_types
         resources :events
         resources :countries
         resources :locations
         resources :climates
         resources :follows
-        resources :posts do
-          resources :tags
-          resources :post_comments
-          resources :post_tags
-        end
+        resources :garden_tags
       end
       resources :posts do
         resources :tags

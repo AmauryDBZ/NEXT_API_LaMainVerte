@@ -1,5 +1,7 @@
 class Api::GardenCommentsController < ApplicationController
   before_action :set_garden_comment, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_owner_or_admin, only: [:destroy, :update]
 
   # GET /garden_comments
   def index
@@ -27,6 +29,8 @@ class Api::GardenCommentsController < ApplicationController
   # POST /garden_comments
   def create
     @garden_comment = GardenComment.new(garden_comment_params)
+    @garden_comment.garden_id = Garden.find(params[:garden_id]).id
+    @garden_comment.user_id = current_user.id
 
     if @garden_comment.save
       render json: @garden_comment, status: :created, location: @api_garden_comment
@@ -58,5 +62,13 @@ class Api::GardenCommentsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def garden_comment_params
       params.require(:garden_comment).permit(:content)
+    end
+
+    def is_owner_or_admin
+      if current_user.is_admin || current_user.id == @garden_comment.user_id
+        return true
+      else
+        render json: {error: "You cannot edit/delete a comment if you are not its owner or an administrator."}, status: :unauthorized
+      end
     end
 end

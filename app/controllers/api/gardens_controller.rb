@@ -1,5 +1,7 @@
 class Api::GardensController < ApplicationController
   before_action :set_garden, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_owner_or_admin, only: [:destroy, :update]
 
   # GET /gardens
   def index
@@ -32,7 +34,8 @@ class Api::GardensController < ApplicationController
   # POST /gardens
   def create
     @garden = Garden.new(garden_params)
-
+    @garden.user_id = current_user.id
+    
     if @garden.save
       render json: @garden, status: :created, location: @api_garden
     else
@@ -62,6 +65,14 @@ class Api::GardensController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def garden_params
-      params.fetch(:garden, {})
+      params.require(:garden).permit(:area, :location_id, :climate_id, :garden_type_id, :name)
+    end
+
+    def is_owner_or_admin
+      if current_user.is_admin || current_user.id == @garden.user_id
+        return true
+      else
+        render json: {error: "You cannot edit/delete a type of garden if you are not an administrator."}, status: :unauthorized
+      end
     end
 end
