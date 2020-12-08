@@ -21,7 +21,9 @@ class Api::ClimatesController < ApplicationController
 
   # GET /climates/1
   def show
-    render json: @climate
+    @gardens = Garden.where(climate: @climate)
+
+    render json: {"climate" => @climate, "gardens" => @gardens}
   end
 
   # POST /climates

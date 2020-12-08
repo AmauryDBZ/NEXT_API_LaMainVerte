@@ -3,9 +3,15 @@ class Api::TestimoniesController < ApplicationController
 
   # GET /testimonies
   def index
-    @testimonies = Testimony.all
+    if params[:user_id] 
+      @testimonies = User.find(params[:user_id]).testimonies
 
-    render json: @testimonies
+      render json: @testimonies
+    else
+      @testimonies = Testimony.all
+      
+      render json: @testimonies
+    end
   end
 
   # GET /testimonies/1

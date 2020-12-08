@@ -3,9 +3,26 @@ class Api::TagsController < ApplicationController
 
   # GET /tags
   def index
-    @tags = Tag.all
+    if params[:user_id] && params[:garden_id] && params[:post_id]
+      if Garden.find(params[:garden_id]).user_id.to_i != params[:user_id].to_i
 
-    render json: @tags
+        render json: {error: "This garden doesn't exist or wasn't created by this user"}, status: 404
+      else 
+        @tags = []
+        @posts = Garden.find(params[:garden_id]).posts
+        @posts.each do |post|
+          if post.id == params[:post_id].to_i
+            @tags << post.tags
+          end
+        end
+
+        render json: @tags.flatten
+      end
+    else
+      @tags = Tag.all
+      
+      render json: @tags
+    end
   end
 
   # GET /tags/1

@@ -32,6 +32,7 @@ Rails.application.routes.draw do
         resources :posts do
           resources :tags
           resources :post_comments
+          resources :post_tags
         end
       end
       resources :posts do

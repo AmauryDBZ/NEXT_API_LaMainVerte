@@ -3,9 +3,20 @@ class Api::PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.all
+    if params[:user_id] && params[:garden_id]
+      if Garden.find(params[:garden_id]).user_id.to_i != params[:user_id].to_i
 
-    render json: @posts
+        render json: {error: "This garden doesn't exist or wasn't created by this user"}, status: 404
+      else 
+        @posts = Garden.find(params[:garden_id]).posts
+
+        render json: @posts
+      end
+    else
+      @posts = Post.all
+      
+      render json: @posts
+    end
   end
 
   # GET /posts/1
