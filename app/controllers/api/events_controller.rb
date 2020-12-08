@@ -1,5 +1,7 @@
 class Api::EventsController < ApplicationController
   before_action :set_event, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_owner_or_admin, only: [:destroy, :update]
 
   # GET /events
   def index
@@ -21,13 +23,13 @@ class Api::EventsController < ApplicationController
 
   # GET /events/1
   def show
-
     render json: {"event" => @event, "garden" => @event.garden, "user" => @event.garden.user}
   end
 
   # POST /events
   def create
     @event = Event.new(event_params)
+    @event.garden = Garden.find(params[:garden_id])
 
     if @event.save
       render json: @event, status: :created, location: @api_event
@@ -59,5 +61,13 @@ class Api::EventsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def event_params
       params.require(:event).permit(:name, :description, :date)
+    end
+    
+    def is_owner_or_admin
+      if current_user.is_admin || current_user.id == @event.garden.user_id
+        return true
+      else
+        render json: {error: "You cannot edit/create/delete an event if you are not the owner or an administrator."}, status: :unauthorized
+      end
     end
 end

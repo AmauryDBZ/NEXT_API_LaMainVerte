@@ -1,5 +1,7 @@
 class Api::CountriesController < ApplicationController
   before_action :set_country, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_admin, only: [:create, :update, :destroy]
 
   # GET /countries
   def index
@@ -68,5 +70,13 @@ class Api::CountriesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def country_params
       params.require(:country).permit(:name)
+    end
+
+    def is_admin
+      if current_user.is_admin
+        return true
+      else
+        render json: {error: "You have to be an administrator to do this stuff"}, status: :unauthorized
+      end
     end
 end

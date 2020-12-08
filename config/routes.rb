@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     
     resources :testimonies, only: [:index, :show]
-    resources :follows, only: [:index, :show]
+    resources :follows
     resources :countries
     resources :locations
     resources :climates

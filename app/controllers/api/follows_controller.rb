@@ -1,5 +1,7 @@
 class Api::FollowsController < ApplicationController
   before_action :set_follow, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_owner_or_admin, only: [:destroy, :update]
 
   # GET /follows
   def index
@@ -29,6 +31,7 @@ class Api::FollowsController < ApplicationController
   # POST /follows
   def create
     @follow = Follow.new(follow_params)
+    @follow.user_id = current_user.id
 
     if @follow.save
       render json: @follow, status: :created, location: @api_follow
@@ -59,6 +62,14 @@ class Api::FollowsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def follow_params
-      params.fetch(:follow, {})
+      params.require(:follow).permit(:garden_id)
+    end
+
+    def is_owner_or_admin
+      if current_user.is_admin || current_user.id == @follow.user_id
+        return true
+      else
+        render json: {error: "You cannot edit/delete a subscription if you are not the owner or an administrator."}, status: :unauthorized
+      end
     end
 end

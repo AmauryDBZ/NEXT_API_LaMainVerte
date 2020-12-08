@@ -1,5 +1,7 @@
 class Api::ClimatesController < ApplicationController
   before_action :set_climate, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :is_admin, only: [:create, :update, :destroy]
 
   # GET /climates
   def index
@@ -60,5 +62,14 @@ class Api::ClimatesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def climate_params
       params.require(:climate).permit(:name)
+    end
+
+
+    def is_admin
+      if current_user.is_admin
+        return true
+      else
+        render json: {error: "You have to be an administrator to do this stuff"}, status: :unauthorized
+      end
     end
 end
