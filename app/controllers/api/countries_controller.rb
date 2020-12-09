@@ -15,7 +15,7 @@ class Api::CountriesController < ApplicationController
         render json: @countries
       end
     else
-        @countries = Climate.all
+        @countries = Country.all
         
         render json: @countries
     end
