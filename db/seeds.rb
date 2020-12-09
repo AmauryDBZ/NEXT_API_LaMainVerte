@@ -41,11 +41,12 @@ garden_type_array = ["Urbain", "Rural"]
   user = User.new(
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
-    email: Faker::Internet.unique.email,
     password: "azerty",
+    password_confirmation: "azerty",
     is_admin: false
   )
   user.save
+  user.update(email: user.first_name + "@yopmail.com")
   puts "user #{user.id} created"
 end
 
@@ -53,6 +54,7 @@ User.create(first_name: "Fli",
   last_name: "bustier",
   email: "flibustier@yopmail.com",
   password: "azerty",
+  password_confirmation: "azerty",
   is_admin: true
 )
 puts "Flibustier created"
