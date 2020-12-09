@@ -11,6 +11,8 @@ class Garden < ApplicationRecord
   belongs_to :user
   has_many :events 
 
+  has_one_attached :cover
+  
   # VALIDATIONS
   validates :name, presence: true
 end 

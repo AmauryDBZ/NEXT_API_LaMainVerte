@@ -5,6 +5,7 @@ class Post < ApplicationRecord
   has_many :tags, through: :post_tags
   belongs_to :garden
 
+  has_many_attached :images
   # VALIDATIONS
   validates :title, :content, presence: true
 end
