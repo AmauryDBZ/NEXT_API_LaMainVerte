@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :post_comments
   has_many :garden_comments
   has_many :testimonies
+  has_one_attached :avatar
   
   # VALIDATIONS
   validates :email, :first_name, :last_name,

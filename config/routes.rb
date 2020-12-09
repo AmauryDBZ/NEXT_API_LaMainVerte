@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     resources :tags
     resources :events
     resources :garden_comments
+    resources :images, only: %i[create index]
+    resources :avatars, only: %i[create index]
+    resources :covers, only: %i[create index]
 
     resources :posts do
       resources :post_comments
