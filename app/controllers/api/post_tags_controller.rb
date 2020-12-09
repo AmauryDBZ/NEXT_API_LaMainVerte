@@ -48,6 +48,7 @@ class Api::PostTagsController < ApplicationController
   # PATCH/PUT /post_tags/1
   def update
     if @post_tag.update(post_tag_params)
+
       render json: @post_tag
     else
       render json: @post_tag.errors, status: :unprocessable_entity

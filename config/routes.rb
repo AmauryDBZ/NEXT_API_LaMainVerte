@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     resources :events
     resources :garden_comments
 
-    resources :posts, only: [:index, :show] do
+    resources :posts do
       resources :post_comments
       resources :tags
       resources :post_tags
