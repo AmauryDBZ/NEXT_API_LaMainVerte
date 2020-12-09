@@ -30,7 +30,7 @@ class Api::UsersController < Api::BaseController
   end
 
   def update
-    if current_user != @user && !current_user.is_admin
+    if current_user.id != @user.id && !current_user.is_admin
       render json: {error: "You cannot edit someone else's account, unless you are an administrator."}, status: :unauthorized
     else
       if @user.update(user_params)
