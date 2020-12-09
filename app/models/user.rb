@@ -17,7 +17,7 @@ class User < ApplicationRecord
 
   validates_uniqueness_of :email
   validate :check_email_and_password
-  validate :check_password_confirmation
+  validate :check_password_confirmation, on: :create
 
   def check_email_and_password
     errors.add(:password, ": can't be the same as email") if email == password
@@ -25,6 +25,7 @@ class User < ApplicationRecord
     
   def check_password_confirmation
     errors.add(:password_confirmation, ": passwords do not match") if password_confirmation != password
+
   end
 
 end
