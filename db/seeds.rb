@@ -41,17 +41,21 @@ garden_type_array = ["Urbain", "Rural"]
   user = User.new(
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
-    email: Faker::Internet.unique.email,
-    password: "azerty"
+    password: "azerty",
+    password_confirmation: "azerty",
+    is_admin: false
   )
   user.save
+  user.update(email: user.first_name + "@yopmail.com")
   puts "user #{user.id} created"
 end
 
 User.create(first_name: "Fli",
   last_name: "bustier",
   email: "flibustier@yopmail.com",
-  password: "azerty"
+  password: "azerty",
+  password_confirmation: "azerty",
+  is_admin: true
 )
 puts "Flibustier created"
 
@@ -67,7 +71,7 @@ end
 # COUNTRY
 3.times do
   Country.create(
-   name: Faker::Address.country 
+  name: Faker::Address.country 
   )
 end
 
@@ -119,7 +123,7 @@ end
 end
 
 # GARGEN TAG
-3.times do
+10.times do
     GardenTag.create(
       garden: Garden.all.sample,
       tag: Tag.all.sample
@@ -127,7 +131,7 @@ end
 end
 
 # POST TAG
-3.times do
+10.times do
   PostTag.create(
     post: Post.all.sample,
     tag: Tag.all.sample
