@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     resources :images, only: %i[create index]
     resources :avatars, only: %i[create index]
     resources :covers, only: %i[create index]
+    resources :queries, only: [:index]
 
     resources :posts do
       resources :post_comments
