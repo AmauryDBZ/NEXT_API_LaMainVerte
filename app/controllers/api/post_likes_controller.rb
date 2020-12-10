@@ -1,7 +1,6 @@
 class Api::PostLikesController < ApplicationController
   before_action :set_post_like, only: [:show, :update, :destroy]
   before_action :authenticate_user!, only: [:create, :update, :destroy]
-  before_action :is_admin, only: [:update]
 
   # GET /post_likes
   def index
@@ -12,7 +11,7 @@ class Api::PostLikesController < ApplicationController
 
   # GET /post_likes/1
   def show
-    render json: @post_like
+    render json: {"post_like" => @post_like, "post" => @post_like.post, "user" => @post_like.user}
   end
 
   # POST /post_likes
@@ -53,13 +52,5 @@ class Api::PostLikesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def post_like_params
       params.require(:post_like).permit(:post_id)
-    end
-
-    def is_admin
-      if current_user.is_admin
-        return true
-      else
-        render json: {error: "You cannot edit a like if you are not an administrator."}, status: :unauthorized
-      end
     end
 end

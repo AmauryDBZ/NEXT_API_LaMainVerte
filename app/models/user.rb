@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :garden_comments
   has_many :testimonies
   has_many :post_likes
+  has_many :garden_likes
   
   # VALIDATIONS
   validates :email, :first_name, :last_name, :username,
