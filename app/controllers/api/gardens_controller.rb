@@ -28,7 +28,10 @@ class Api::GardensController < ApplicationController
       "followers" => @followers,
       "posts" => @garden.posts,
       "events" => @garden.events,
-      "comments" => @garden.garden_comments}
+      "comments" => @garden.garden_comments,
+      "climate" => @garden.climate,
+      "location" => @garden.location,
+      "country" => @garden.location.country}
   end
 
   # POST /gardens
