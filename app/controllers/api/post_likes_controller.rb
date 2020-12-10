@@ -1,6 +1,6 @@
 class Api::PostLikesController < ApplicationController
   before_action :set_post_like, only: [:show, :update, :destroy]
-  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :destroy]
 
   # GET /post_likes
   def index
@@ -40,6 +40,9 @@ class Api::PostLikesController < ApplicationController
 
   # DELETE /post_likes/1
   def destroy
+    @liked_post = Post.find(@post_like.post_id)
+    @liked_post.update(likes: @liked_post.likes - 1)
+
     @post_like.destroy
   end
 

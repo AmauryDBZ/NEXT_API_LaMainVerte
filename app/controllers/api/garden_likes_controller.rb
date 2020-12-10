@@ -40,6 +40,9 @@ class Api::GardenLikesController < ApplicationController
 
   # DELETE /garden_likes/1
   def destroy
+    @liked_garden = Garden.find(@garden_like.garden_id)
+    @liked_garden.update(likes: @liked_garden.likes - 1)
+    
     @garden_like.destroy
   end
 
