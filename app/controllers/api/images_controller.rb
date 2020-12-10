@@ -1,4 +1,4 @@
-class ImagesController < ApplicationController
+class Api::ImagesController < ApplicationController
     def index
         render json: Picture.all.with_attached_attachment.order(id: :desc)
     end
