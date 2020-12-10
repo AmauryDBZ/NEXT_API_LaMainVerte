@@ -13,7 +13,7 @@ class User < ApplicationRecord
   has_one_attached :avatar
   
   # VALIDATIONS
-  validates :email, :first_name, :last_name,
+  validates :email, :first_name, :last_name, :username,
     presence: true
 
   validates_uniqueness_of :email, :username
