@@ -45,13 +45,15 @@ garden_type_array = ["Urbain", "Rural"]
     password_confirmation: "azerty",
     is_admin: false
   )
+  user.email = user.first_name + "@yopmail.com"
+  user.username = user.first_name.downcase + "_bg_du_" + rand(14..99).to_s
   user.save
-  user.update(email: user.first_name + "@yopmail.com")
   puts "user #{user.id} created"
 end
 
 User.create(first_name: "Fli",
   last_name: "bustier",
+  username: "flibg_de_la_marine",
   email: "flibustier@yopmail.com",
   password: "azerty",
   password_confirmation: "azerty",
