@@ -10,10 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_10_142459) do
+ActiveRecord::Schema.define(version: 2020_12_10_154834) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "avatars", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "climates", force: :cascade do |t|
     t.string "name"
@@ -23,6 +28,11 @@ ActiveRecord::Schema.define(version: 2020_12_10_142459) do
 
   create_table "countries", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "covers", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -56,6 +66,15 @@ ActiveRecord::Schema.define(version: 2020_12_10_142459) do
     t.index ["user_id"], name: "index_garden_comments_on_user_id"
   end
 
+  create_table "garden_likes", force: :cascade do |t|
+    t.bigint "garden_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["garden_id"], name: "index_garden_likes_on_garden_id"
+    t.index ["user_id"], name: "index_garden_likes_on_user_id"
+  end
+
   create_table "garden_tags", force: :cascade do |t|
     t.bigint "garden_id"
     t.bigint "tag_id"
@@ -80,12 +99,17 @@ ActiveRecord::Schema.define(version: 2020_12_10_142459) do
     t.bigint "garden_type_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "likes", default: 0
     t.index ["climate_id"], name: "index_gardens_on_climate_id"
     t.index ["garden_type_id"], name: "index_gardens_on_garden_type_id"
     t.index ["location_id"], name: "index_gardens_on_location_id"
     t.index ["user_id"], name: "index_gardens_on_user_id"
   end
 
+  create_table "images", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "jwt_denylist", force: :cascade do |t|
     t.string "jti", null: false
@@ -113,6 +137,15 @@ ActiveRecord::Schema.define(version: 2020_12_10_142459) do
     t.index ["user_id"], name: "index_post_comments_on_user_id"
   end
 
+  create_table "post_likes", force: :cascade do |t|
+    t.bigint "post_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_post_likes_on_post_id"
+    t.index ["user_id"], name: "index_post_likes_on_user_id"
+  end
+
   create_table "post_tags", force: :cascade do |t|
     t.bigint "post_id"
     t.bigint "tag_id"
@@ -128,6 +161,7 @@ ActiveRecord::Schema.define(version: 2020_12_10_142459) do
     t.bigint "garden_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "likes", default: 0
     t.index ["garden_id"], name: "index_posts_on_garden_id"
   end
 
