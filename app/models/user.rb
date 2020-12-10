@@ -12,10 +12,10 @@ class User < ApplicationRecord
   has_many :testimonies
   
   # VALIDATIONS
-  validates :email, :first_name, :last_name,
+  validates :email, :first_name, :last_name, :username,
     presence: true
 
-  validates_uniqueness_of :email
+  validates_uniqueness_of :email, :username
   validate :check_email_and_password
   validate :check_password_confirmation, on: :create
 
