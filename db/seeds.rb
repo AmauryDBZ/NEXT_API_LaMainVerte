@@ -45,13 +45,15 @@ garden_type_array = ["Urbain", "Rural"]
     password_confirmation: "azerty",
     is_admin: false
   )
+  user.email = user.first_name + "@yopmail.com"
+  user.username = user.first_name.downcase + "_" + user.last_name.downcase
   user.save
-  user.update(email: user.first_name + "@yopmail.com")
   puts "user #{user.id} created"
 end
 
 User.create(first_name: "Fli",
   last_name: "bustier",
+  username: "flibusrier",
   email: "flibustier@yopmail.com",
   password: "azerty",
   password_confirmation: "azerty",

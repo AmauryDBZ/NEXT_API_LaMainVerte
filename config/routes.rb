@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     resources :tags
     resources :events
     resources :garden_comments
+    resources :queries, only: [:index]
+    resources :post_likes, except: [:update]
+    resources :garden_likes, except: [:update]
 
     resources :posts do
       resources :post_comments

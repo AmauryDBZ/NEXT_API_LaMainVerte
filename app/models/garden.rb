@@ -10,6 +10,7 @@ class Garden < ApplicationRecord
   has_many :follows               
   belongs_to :user
   has_many :events 
+  has_many :garden_likes
 
   # VALIDATIONS
   validates :name, presence: true
