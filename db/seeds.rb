@@ -97,8 +97,8 @@ j=0
 end
 
 # GARDEN
-5.times do
-  Garden.create(
+20.times do
+  garden = Garden.create(
     name: Faker::Games::Minecraft.biome,
     area: rand(1..150),
     user: User.all.sample,
@@ -106,6 +106,7 @@ end
     climate: Climate.all.sample,
     garden_type: GardenType.all.sample
   )
+  puts "Garden #{garden.id} created"
 end
 
 # TAG
@@ -182,4 +183,13 @@ end
     content: Faker::Lorem.sentences,
     user: User.all.sample
   )
+end
+
+# GARDEN LIKE
+15.times do
+  gardenlike = GardenLike.create(
+    user: User.all.sample,
+    garden: Garden.all.sample
+  )
+  puts "GardenLike #{gardenlike.id} created"
 end

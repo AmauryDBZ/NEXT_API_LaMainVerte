@@ -15,11 +15,6 @@ ActiveRecord::Schema.define(version: 2020_12_10_154834) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "avatars", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "climates", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -28,11 +23,6 @@ ActiveRecord::Schema.define(version: 2020_12_10_154834) do
 
   create_table "countries", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "covers", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -104,11 +94,6 @@ ActiveRecord::Schema.define(version: 2020_12_10_154834) do
     t.index ["garden_type_id"], name: "index_gardens_on_garden_type_id"
     t.index ["location_id"], name: "index_gardens_on_location_id"
     t.index ["user_id"], name: "index_gardens_on_user_id"
-  end
-
-  create_table "images", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "jwt_denylist", force: :cascade do |t|
@@ -195,4 +180,5 @@ ActiveRecord::Schema.define(version: 2020_12_10_154834) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
 end
