@@ -16,6 +16,7 @@ class Api::PostsController < ApplicationController
       end
     else
       @posts = Post.all
+      render json: @posts
     end
   end
 
