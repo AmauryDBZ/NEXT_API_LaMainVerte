@@ -15,7 +15,15 @@ class Api::UsersController < Api::BaseController
       @posts << garden.posts
     end
     @follows = news_feed_sort
- 
+
+    if params[:page]
+      index1 = params[:page].to_i * 10 - 10
+      index2 = index1 + 9
+      @follows = @follows[index1 .. index2]
+    else                           
+      @follows = @follows[0..9]
+    end
+    
     render json: {
       "user" => @user,
       "gardens" => @user.gardens,
@@ -63,9 +71,7 @@ class Api::UsersController < Api::BaseController
     @user.follows.each do |follow|
       followed_gardens << follow.garden
     end
-    # key = garden.id
-    # value = score of the garden
-    
+
     global_scores = Hash.new
 
     followed_gardens.each do |garden|
@@ -97,4 +103,6 @@ class Api::UsersController < Api::BaseController
 
     return sorted_gardens
   end
+
+
 end
