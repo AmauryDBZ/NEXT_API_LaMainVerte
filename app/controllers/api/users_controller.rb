@@ -23,6 +23,8 @@ class Api::UsersController < Api::BaseController
     else                           
       @follows = @follows[0..9]
     end
+
+    @selected_users = users_selection
     
     render json: {
       "user" => @user,
@@ -31,7 +33,8 @@ class Api::UsersController < Api::BaseController
       "post_comments" => @user.post_comments,
       "garden_comments" => @user.garden_comments,
       "testimonies" => @user.testimonies,
-      "follows" => @follows
+      "follows" => @follows, 
+      "selected_users" => @selected_users
     }
   end
 
@@ -104,5 +107,12 @@ class Api::UsersController < Api::BaseController
     return sorted_gardens
   end
 
+  def users_selection
+    selected_users = Array.new
+
+    User.all.each do |user|
+      
+    end
+  end
 
 end
