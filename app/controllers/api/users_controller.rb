@@ -78,8 +78,8 @@ class Api::UsersController < Api::BaseController
        
       if  Time.now.strftime("%Hh %d/%m/%Y") == garden.updated_at.strftime("%Hh %d/%m/%Y")
         score += 20
-      elsif Time.now.strftime("%d/%m/%Y") == garden.updated_at.strftime("%d/%m/%Y") 
-
+      elsif Time.now.strftime("%d/%m/%Y") == garden.updated_at.strftime("%d/%m/%Y") && Time.now.hour - garden.updated_at.hour <= 5
+        score += 15
       elsif  Time.now.strftime("%d/%m/%Y") == garden.updated_at.strftime("%d/%m/%Y")
         score += 10
       end
@@ -87,9 +87,14 @@ class Api::UsersController < Api::BaseController
       global_scores[garden.id] = score
     end
 
+    followed_gardens = global_scores.sort_by(&:last).reverse
 
-    # last_updated_gardens = followed_gardens.sort{|a,b| b.updated_at <=> a.updated_at}
-    return last_updated_gardens
+    sorted_gardens = Array.new
+    
+    followed_gardens.each do |garden|
+      sorted_gardens << Garden.find(garden[0])
+    end
+
+    return sorted_gardens
   end
-
 end
