@@ -23,17 +23,13 @@ class Api::PostsController < ApplicationController
 
   # GET /posts/1
   def show
-    @likers = Array.new
-    @post.post_likes.each do |like|
-        @likers << like.user
-    end
 
     render json: {
       "post" => @post,
       "user" => @post.garden.user, 
       "garden" => @post.garden, 
       "tags" => @post.tags,
-      "liked_by" => @likers
+      "likes" => @post.post_likes
     }
   end
 
