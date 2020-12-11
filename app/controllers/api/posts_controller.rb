@@ -16,8 +16,6 @@ class Api::PostsController < ApplicationController
       end
     else
       @posts = Post.all
-      
-      render json: @posts
     end
   end
 
@@ -33,6 +31,7 @@ class Api::PostsController < ApplicationController
       "user" => @post.garden.user, 
       "garden" => @post.garden, 
       "tags" => @post.tags,
+      "comments" => @post.post_comments,
       "liked_by" => @likers
     }
   end
@@ -43,6 +42,7 @@ class Api::PostsController < ApplicationController
     @post.garden_id = Garden.find(params[:garden_id]).id
 
     if @post.save
+      @post.garden.update(updated_at: Time.now)
       render json: @post, status: :created, location: @api_post
     else
       render json: @post.errors, status: :unprocessable_entity
