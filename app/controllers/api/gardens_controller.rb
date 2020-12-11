@@ -17,7 +17,6 @@ class Api::GardensController < ApplicationController
   # GET /gardens/1
   def show
     @followers = Array.new
-    @likers = Array.new
 
     Follow.all.each do |follow|
       if follow.garden == @garden
@@ -25,9 +24,6 @@ class Api::GardensController < ApplicationController
       end
     end
 
-    @garden.garden_likes.each do |like|
-      @likers << like.user
-    end
 
     render json: {
       "garden" => @garden,
@@ -40,7 +36,7 @@ class Api::GardensController < ApplicationController
       "climate" => @garden.climate,
       "location" => @garden.location,
       "country" => @garden.location.country,
-      "liked_by" => @likers
+      "likes" => @garden.garden_likes
     }
   end
 
