@@ -34,6 +34,7 @@ class Api::GardensController < ApplicationController
       "user" => @garden.user,
       "followers" => @followers,
       "posts" => @garden.posts,
+      "type" => @garden.garden_type,
       "events" => @garden.events,
       "comments" => @garden.garden_comments,
       "climate" => @garden.climate,
