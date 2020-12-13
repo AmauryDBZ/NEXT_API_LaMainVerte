@@ -29,6 +29,7 @@ class Api::GardensController < ApplicationController
       "garden" => @garden,
       "user" => @garden.user,
       "followers" => @followers,
+      "follows" => @garden.follows,
       "posts" => @garden.posts,
       "type" => @garden.garden_type,
       "events" => @garden.events,
