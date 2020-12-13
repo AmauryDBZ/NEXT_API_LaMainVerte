@@ -16,8 +16,8 @@ class Api::UsersController < Api::BaseController
     end
     @follows = news_feed_sort
 
-    if params[:page]
-      index1 = params[:page].to_i * 10 - 10
+    if params[:follows_page]
+      index1 = params[:follows_page].to_i * 10 - 10
       index2 = index1 + 9
       @follows = @follows[index1 .. index2]
     else                           
@@ -25,6 +25,14 @@ class Api::UsersController < Api::BaseController
     end
 
     @selected_users = users_selection
+
+    if params[:selected_users_page]
+      index1 = params[:selected_users_page].to_i * 10 - 10
+      index2 = index1 + 9
+      @selected_users = @selected_users[index1 .. index2]
+    else                           
+      @selected_users = @selected_users[0..9]
+    end
     
     render json: {
       "user" => @user,
@@ -109,10 +117,61 @@ class Api::UsersController < Api::BaseController
 
   def users_selection
     selected_users = Array.new
+    global_scores = Hash.new
 
     User.all.each do |user|
-      
+      score = 0
+
+      if user != @user
+        already_followed = false
+
+        user.gardens.each do |garden|
+          garden.follows.each do |follow|
+            if follow.user_id = @user.id 
+              already_followed = true
+            end
+          end
+        end
+
+        if !already_followed
+          user.follows.each do |follow|
+            @user.follows.each do |current_user_follow|
+              if follow.garden_id == current_user_follow.garden_id
+                score += 1
+              end
+
+              if Garden.find(current_user_follow.garden_id).garden_type ==  Garden.find(follow.garden_id ).garden_type
+                score += 1
+              end
+            end
+          end
+
+          @user.garden_likes.each do |like|
+            Garden.find(like.garden_id).tags.each do |liked_tag|
+              user.gardens.each do |garden|
+                garden.tags.each do |tag|
+                  if tag == liked_tag
+                    score += 1
+                  end
+                end
+              end
+            end
+          end
+        end
+
+        global_scores[user.id] = score
+      end
     end
+
+    selected_users = global_scores.sort_by(&:last).reverse
+
+    sorted_users = Array.new
+    
+    selected_users.each do |user|
+      sorted_users << User.find(user[0])
+    end
+
+    return sorted_users
   end
 
 end
