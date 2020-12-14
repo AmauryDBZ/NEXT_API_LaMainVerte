@@ -39,7 +39,7 @@ class Api::GardensController < ApplicationController
       "country" => @garden.location.country,
       "likes" => @garden.garden_likes,
       "picture_url" => @garden.picture_url,
-      "picture_opacity" = @garden.picture_opacity
+      "picture_opacity" => @garden.picture_opacity
     }
   end
 
