@@ -37,7 +37,9 @@ class Api::GardensController < ApplicationController
       "climate" => @garden.climate,
       "location" => @garden.location,
       "country" => @garden.location.country,
-      "likes" => @garden.garden_likes
+      "likes" => @garden.garden_likes,
+      "picture_url" => @garden.picture_url,
+      "picture_opacity" => @garden.picture_opacity
     }
   end
 
@@ -75,7 +77,7 @@ class Api::GardensController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def garden_params
-      params.require(:garden).permit(:area, :location_id, :climate_id, :garden_type_id, :name)
+      params.require(:garden).permit(:area, :location_id, :climate_id, :garden_type_id, :name, :picture_opacity, :picture_url)
     end
 
     def is_owner_or_admin

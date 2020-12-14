@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     
+    get '/upload', to: 's3_uploads#set_s3_direct_post'
+
     resources :testimonies
     resources :follows
     resources :countries
