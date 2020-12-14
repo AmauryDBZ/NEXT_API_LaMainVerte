@@ -42,7 +42,8 @@ class Api::UsersController < Api::BaseController
       "garden_comments" => @user.garden_comments,
       "testimonies" => @user.testimonies,
       "follows" => @follows, 
-      "selected_users" => @selected_users
+      "selected_users" => @selected_users,
+      "avatar" => @user.avatar_url
     }
   end
 
@@ -73,7 +74,7 @@ class Api::UsersController < Api::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :username)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :username, :avatar_url)
   end
 
   def news_feed_sort
@@ -92,7 +93,7 @@ class Api::UsersController < Api::BaseController
         score += post.likes
         score += post.post_comments.length
       end
-       
+      
       if  Time.now.strftime("%Hh %d/%m/%Y") == garden.updated_at.strftime("%Hh %d/%m/%Y")
         score += 20
       elsif Time.now.strftime("%d/%m/%Y") == garden.updated_at.strftime("%d/%m/%Y") && Time.now.hour - garden.updated_at.hour <= 5
