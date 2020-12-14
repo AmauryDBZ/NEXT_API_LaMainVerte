@@ -12,6 +12,7 @@ gem 'activerecord-reset-pk-sequence'
 gem 'faker'
 gem 'rspec-rails'
 gem 'jsonapi-rspec'
+gem 'aws-sdk', '~> 3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.4'
