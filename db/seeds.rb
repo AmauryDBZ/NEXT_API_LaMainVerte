@@ -104,7 +104,8 @@ end
     user: User.all.sample,
     location: Location.all.sample,
     climate: Climate.all.sample,
-    garden_type: GardenType.all.sample
+    garden_type: GardenType.all.sample,
+    description: Faker::Books::Dune.quote
   )
   puts "Garden #{garden.id} created"
 end
@@ -173,7 +174,8 @@ end
     name:Faker::Lorem.sentence,
     description: Faker::Lorem.sentences,
     garden: Garden.all.sample,
-    date: Faker::Time.between_dates(from: Date.today - 1, to: Date.today, period: :all)
+    start_date: Faker::Time.between_dates(from: Date.today - 1, to: Date.today, period: :all),
+    end_date: Faker::Time.between_dates(from: Date.today + 2, to: Date.today + 5, period: :all)
   )
 end
 
