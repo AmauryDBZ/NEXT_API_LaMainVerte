@@ -16,9 +16,9 @@ class Api::UsersController < Api::BaseController
     end
 
     if current_user.follows.length <= 10
-      @follows = news_feed_sort
-    else
       @follows = new_user_feed
+    else
+      @follows = news_feed_sort 
     end
 
     if params[:follows_page]
