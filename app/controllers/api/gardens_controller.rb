@@ -8,9 +8,8 @@ class Api::GardensController < ApplicationController
     if params[:user_id]
       @gardens = User.find(params[:user_id]).gardens
     else
-      @gardens = Garden.all
+      @gardens = Garden.filter(params)
     end
-
     render json: @gardens
   end
 
