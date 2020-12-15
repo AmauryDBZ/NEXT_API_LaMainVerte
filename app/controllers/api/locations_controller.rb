@@ -15,9 +15,9 @@ class Api::LocationsController < ApplicationController
         render json: @locations
       end
     else
-      @garden_types = GardenType.all
+      @locations = Location.all
       
-      render json: @garden_types
+      render json: @locations
     end
   end
 
