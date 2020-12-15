@@ -1,32 +1,46 @@
 class Api::QueriesController < ApplicationController
 
     def index
-        @input = params[:input].downcase
         @results = Hash.new
         @results["users"] = Array.new
         @results["gardens"] = Array.new
 
-    if params[:input]
+        if params[:input]
+            @input = params[:input].downcase
 
-        User.all.each do |user|
-        if user.username.downcase.include? params[:input]
-            @results["users"] << user
-        end
-        end
+            User.all.each do |user|
+                if user.username.downcase.include? params[:input]
+                    @results["users"] << user
+                end
+            end
 
-        @results["users"] = relevance_sort_results(@results["users"], @input, "users")
+            @results["users"] = relevance_sort_results(@results["users"], @input, "users")
 
-        Garden.all.each do |garden|
-        if garden.name.downcase.include? params[:input]
-            @results["gardens"] << garden 
-        end
-        end
+            Garden.all.each do |garden|
+                if garden.name.downcase.include? params[:input]
+                    @results["gardens"] << garden 
+                end
+            end
 
-        @results["gardens"] = relevance_sort_results(@results["gardens"], @input, "gardens")
+						@results["gardens"] = relevance_sort_results(@results["gardens"], @input, "gardens")
+				end
 
-    end
-
-    render json: @results
+        if params[:news_feed] == "visitor"
+            @results["gardens"] = new_user_feed
+						@results["users"] = displayed_users
+				end
+				
+				if params[:follows_page]
+					index1 = params[:follows_page].to_i * 10 - 10
+					index2 = index1 + 9
+					@results["users"] = @results["users"][index1 .. index2]
+					@results["gardens"] = @results["gardens"][index1 .. index2]
+				else                           
+					@results["users"] = @results["users"][0..9]
+					@results["garden"] = @results["gardens"][0..9]
+				end
+				
+       render json: @results
     end
 
 
@@ -79,4 +93,29 @@ class Api::QueriesController < ApplicationController
 
     end
 
+    def new_user_feed
+        return showed_gardens = Garden.all.sort{|a,b| b.follows.length <=> a.follows.length}
+    end
+
+    def displayed_users
+        displayed_users_array = Array.new
+				global_scores = Hash.new
+
+					User.all.each do |user|
+						score = 0
+						user.gardens.each do |garden|
+							score += garden.follows.length
+						end
+						global_scores[user.id] = score
+					end
+
+					sorted_users = Array.new
+					displayed_users_array = global_scores.sort_by(&:last).reverse
+
+					displayed_users_array.each do |user|
+						sorted_users << User.find(user[0])
+					end
+
+			return sorted_users
+    end
 end
