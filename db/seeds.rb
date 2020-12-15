@@ -196,3 +196,13 @@ end
   )
   puts "GardenLike #{gardenlike.id} created"
 end
+
+# WARNINGS
+3.times do 
+  User.all.sample.update(warning: true)
+  Garden.all.sample.update(warning: true)
+  Post.all.sample.update(warning: true)
+  GardenComment.all.sample.update(warning: true)
+  PostComment.all.sample.update(warning: true)
+  Event.all.sample.update(warning: true)
+ end

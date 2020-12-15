@@ -61,7 +61,7 @@ class Api::GardenCommentsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def garden_comment_params
-      params.require(:garden_comment).permit(:content)
+      params.require(:garden_comment).permit(:content, :warning)
     end
 
     def is_owner_or_admin
