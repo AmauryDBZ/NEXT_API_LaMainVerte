@@ -55,7 +55,7 @@ class Api::TestimoniesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def testimony_params
-      params.require(:testimony).permit(:content)
+      params.require(:testimony).permit(:content, :warning)
     end
 
     def is_owner_or_admin

@@ -68,7 +68,7 @@ class Api::PostsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def post_params
-      params.require(:post).permit(:title, :content, :pictures_url)
+      params.require(:post).permit(:title, :content, :pictures_url, :warning)
     end
 
     def is_owner_or_admin
