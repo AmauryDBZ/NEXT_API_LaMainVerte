@@ -14,14 +14,29 @@ class Api::UsersController < Api::BaseController
     @user.gardens.each do |garden|
       @posts << garden.posts
     end
-    @follows = news_feed_sort
 
-    if params[:page]
-      index1 = params[:page].to_i * 10 - 10
+    if current_user && current_user.follows.length <= 10
+      @follows = new_user_feed
+    else
+      @follows = news_feed_sort 
+    end
+
+    if params[:follows_page]
+      index1 = params[:follows_page].to_i * 10 - 10
       index2 = index1 + 9
       @follows = @follows[index1 .. index2]
     else                           
       @follows = @follows[0..9]
+    end
+
+    @selected_users = users_selection
+
+    if params[:selected_users_page]
+      index1 = params[:selected_users_page].to_i * 10 - 10
+      index2 = index1 + 9
+      @selected_users = @selected_users[index1 .. index2]
+    else                           
+      @selected_users = @selected_users[0..9]
     end
     
     render json: {
@@ -31,7 +46,8 @@ class Api::UsersController < Api::BaseController
       "post_comments" => @user.post_comments,
       "garden_comments" => @user.garden_comments,
       "testimonies" => @user.testimonies,
-      "follows" => @follows,
+      "follows" => @follows, 
+      "selected_users" => @selected_users,
       "avatar" => @user.avatar_url
     }
   end
@@ -83,7 +99,7 @@ class Api::UsersController < Api::BaseController
         score += post.post_comments.length
       end
       
-      if  Time.now.strftime("%Hh %d/%m/%Y") == garden.updated_at.strftime("%Hh %d/%m/%Y")
+      if Time.now.strftime("%Hh %d/%m/%Y") == garden.updated_at.strftime("%Hh %d/%m/%Y")
         score += 20
       elsif Time.now.strftime("%d/%m/%Y") == garden.updated_at.strftime("%d/%m/%Y") && Time.now.hour - garden.updated_at.hour <= 5
         score += 15
@@ -105,5 +121,67 @@ class Api::UsersController < Api::BaseController
     return sorted_gardens
   end
 
+  def new_user_feed
+    return showed_gardens = Garden.all.sort{|a,b| b.follows.length <=> a.follows.length}
+  end
+
+  def users_selection
+    selected_users = Array.new
+    global_scores = Hash.new
+
+    User.all.each do |user|
+      score = 0
+
+      if user != @user
+        already_followed = false
+
+        user.gardens.each do |garden|
+          garden.follows.each do |follow|
+            if follow.user_id = @user.id 
+              already_followed = true
+            end
+          end
+        end
+
+        if !already_followed
+          user.follows.each do |follow|
+            @user.follows.each do |current_user_follow|
+              if follow.garden_id == current_user_follow.garden_id
+                score += 1
+              end
+
+              if Garden.find(current_user_follow.garden_id).garden_type ==  Garden.find(follow.garden_id ).garden_type
+                score += 1
+              end
+            end
+          end
+
+          @user.garden_likes.each do |like|
+            Garden.find(like.garden_id).tags.each do |liked_tag|
+              user.gardens.each do |garden|
+                garden.tags.each do |tag|
+                  if tag == liked_tag
+                    score += 1
+                  end
+                end
+              end
+            end
+          end
+        end
+
+        global_scores[user.id] = score
+      end
+    end
+
+    selected_users = global_scores.sort_by(&:last).reverse
+
+    sorted_users = Array.new
+    
+    selected_users.each do |user|
+      sorted_users << User.find(user[0])
+    end
+
+    return sorted_users
+  end
 
 end
