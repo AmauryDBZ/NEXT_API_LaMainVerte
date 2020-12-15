@@ -24,7 +24,7 @@ class Api::LocationsController < ApplicationController
   # GET /locations/1
   def show
     @gardens = Garden.where(location: @location)
-    render json: {"location" => @location, "country" => @location.country, "gardens" => @gardens}
+    render json: {"location" => @location, "gardens" => @gardens}
   end
 
   # POST /locations
@@ -60,7 +60,7 @@ class Api::LocationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def location_params
-      params.require(:location).permit(:name, :lat, :long, :country_id)
+      params.require(:location).permit(:name)
     end
 
     def is_admin
