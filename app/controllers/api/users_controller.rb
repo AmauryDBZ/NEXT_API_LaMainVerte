@@ -15,7 +15,7 @@ class Api::UsersController < Api::BaseController
       @posts << garden.posts
     end
 
-    if current_user.follows.length <= 10
+    if current_user && current_user.follows.length <= 10
       @follows = new_user_feed
     else
       @follows = news_feed_sort 
