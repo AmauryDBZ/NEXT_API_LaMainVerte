@@ -21,6 +21,8 @@ Rails.application.routes.draw do
     resources :queries, only: [:index]
     resources :post_likes, except: [:update]
     resources :garden_likes, except: [:update]
+    resources :admins, only: [:index]
+    get '/upload', to: 's3_uploads#set_s3_direct_post'
 
     resources :posts do
       resources :post_comments

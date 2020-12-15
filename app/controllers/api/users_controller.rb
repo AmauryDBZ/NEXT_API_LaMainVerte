@@ -79,7 +79,7 @@ class Api::UsersController < Api::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :username, :avatar_url)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :username, :avatar_url, :warning)
   end
 
   def news_feed_sort
