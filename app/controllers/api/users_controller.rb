@@ -14,7 +14,12 @@ class Api::UsersController < Api::BaseController
     @user.gardens.each do |garden|
       @posts << garden.posts
     end
-    @follows = news_feed_sort
+
+    if current_user && current_user.follows.length <= 10
+      @follows = new_user_feed
+    else
+      @follows = news_feed_sort 
+    end
 
     if params[:follows_page]
       index1 = params[:follows_page].to_i * 10 - 10
@@ -94,7 +99,7 @@ class Api::UsersController < Api::BaseController
         score += post.post_comments.length
       end
       
-      if  Time.now.strftime("%Hh %d/%m/%Y") == garden.updated_at.strftime("%Hh %d/%m/%Y")
+      if Time.now.strftime("%Hh %d/%m/%Y") == garden.updated_at.strftime("%Hh %d/%m/%Y")
         score += 20
       elsif Time.now.strftime("%d/%m/%Y") == garden.updated_at.strftime("%d/%m/%Y") && Time.now.hour - garden.updated_at.hour <= 5
         score += 15
@@ -114,6 +119,10 @@ class Api::UsersController < Api::BaseController
     end
 
     return sorted_gardens
+  end
+
+  def new_user_feed
+    return showed_gardens = Garden.all.sort{|a,b| b.follows.length <=> a.follows.length}
   end
 
   def users_selection

@@ -37,7 +37,7 @@ climate_array = ["Tropical", "Méditerranéen", "Continental"]
 garden_type_array = ["Urbain", "Rural"]
 
 # USER
-5.times do
+10.times do
   user = User.new(
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
@@ -104,20 +104,21 @@ end
     user: User.all.sample,
     location: Location.all.sample,
     climate: Climate.all.sample,
-    garden_type: GardenType.all.sample
+    garden_type: GardenType.all.sample,
+    description: Faker::Books::Dune.quote
   )
   puts "Garden #{garden.id} created"
 end
 
 # TAG
-3.times do
+5.times do
   Tag.create(
     name: Faker::Space.constellation
   )
 end
 
 # POST
-10.times do
+15.times do
   Post.create(
     title: Faker::Space.galaxy,
     content: Faker::Books::Dune.quote,
@@ -126,7 +127,7 @@ end
 end
 
 # GARGEN TAG
-10.times do
+20.times do
     GardenTag.create(
       garden: Garden.all.sample,
       tag: Tag.all.sample
@@ -142,7 +143,7 @@ end
 end
 
 # GARDEN COMMENT
-10.times do
+30.times do
   GardenComment.create(
     content: Faker::Lorem.sentences,
     user: User.all.sample,
@@ -151,7 +152,7 @@ end
 end
 
 # POST COMMENT
-10.times do
+30.times do
   PostComment.create(
     content: Faker::Lorem.sentences,
     user: User.all.sample,
@@ -160,20 +161,22 @@ end
 end
 
 # FOLLOW
-5.times do
-  Follow.create(
+30.times do
+  follow = Follow.create(
     user: User.all.sample,
     garden: Garden.all.sample
-  ) 
+  )
+  puts "Follow #{follow.id} created"
 end
 
 # EVENT
-5.times do
+50.times do
   Event.create(
     name:Faker::Lorem.sentence,
     description: Faker::Lorem.sentences,
     garden: Garden.all.sample,
-    date: Faker::Time.between_dates(from: Date.today - 1, to: Date.today, period: :all)
+    start_date: Faker::Time.between_dates(from: Date.today - 1, to: Date.today, period: :all),
+    end_date: Faker::Time.between_dates(from: Date.today + 2, to: Date.today + 5, period: :all)
   )
 end
 
@@ -186,7 +189,7 @@ end
 end
 
 # GARDEN LIKE
-15.times do
+30.times do
   gardenlike = GardenLike.create(
     user: User.all.sample,
     garden: Garden.all.sample

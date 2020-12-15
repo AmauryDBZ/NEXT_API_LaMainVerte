@@ -3,5 +3,5 @@ class Event < ApplicationRecord
   belongs_to :garden
 
   # VALIDATION
-  validates :name, :date, :description, presence: true
+  validates :name, :start_date, :end_date, :description, presence: true
 end
