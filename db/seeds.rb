@@ -9,7 +9,6 @@ GardenComment.delete_all
 Climate.delete_all
 GardenType.delete_all
 Location.delete_all
-Country.delete_all
 Follow.delete_all
 Event.delete_all
 Testimony.delete_all
@@ -25,7 +24,6 @@ GardenComment.reset_pk_sequence
 Climate.reset_pk_sequence
 GardenType.reset_pk_sequence
 Location.reset_pk_sequence
-Country.reset_pk_sequence
 Follow.reset_pk_sequence
 Event.reset_pk_sequence
 Testimony.reset_pk_sequence
@@ -35,6 +33,108 @@ PostTag.reset_pk_sequence
 # ARRAYS
 climate_array = ["Tropical", "Méditerranéen", "Continental"]
 garden_type_array = ["Urbain", "Rural"]
+french_departments = [
+  "Aisne",
+  "Allier",
+  "Alpes-de-Haute-Provence",
+  "Hautes-Alpes",
+  "Alpes-Maritimes",
+  "Ardèche",
+  "Ardennes",
+  "Ariège",
+  "Aube",
+  "Aude",
+  "Aveyron",
+  "Bouches-du-Rhône",
+  "Calvados",
+  "Cantal",
+  "Charente",
+  "Charent-Maritime",
+  "Cher",
+  "Corrèze",
+  "Corse-du-Sud",
+  "Haute-Corse",
+  "Côte-d'Or",
+  "Côtes d'Armor",
+  "Creuse",
+  "Dordogne",
+  "Doubs",
+  "Drôme",
+  "Eure",
+  "Eure-et-Loir",
+  "Finistère",
+  "Gard",
+  "Haute-Garonne",
+  "Gers",
+  "Gironde",
+  "Hérault",
+  "Ille-et-Vilaine",
+  "Indre",
+  "Indre-et-Loire",
+  "Isère",
+  "Jura",
+  "Landes",
+  "Loir-et-Cher",
+  "Loire",
+  "Haute-Loire",
+  "Loire-Atlantique",
+  "Loiret",
+  "Lot",
+  "Lot-et-Garonne",
+  "Lozère",
+  "Maine-et-Loire",
+  "Manche",
+  "Marne",
+  "Haute-Marne",
+  "Mayenne",
+  "Meurthe-et-Moselle",
+  "Meuse",
+  "Morbihan",
+  "Moselle",
+  "Nièvre",
+  "Nord",
+  "Oise",
+  "Orne",
+  "Pas-de-Calais",
+  "Puy-de-Dôme",
+  "Pyrénées-Atlantiques",
+  "Hautes-Pyrénées",
+  "Pyrénées-Orientales",
+  "Bas-Rhin",
+  "Haut-Rhin",
+  "Rhône",
+  "Haute-Saône",
+  "Saône-et-Loire",
+  "Sarthe",
+  "Savoie",
+  "Haute-Savoie",
+  "Paris",
+  "Seine-Maritime",
+  "Seine-et-Marne",
+  "Yvelines",
+  "Deux-Sèvres",
+  "Somme",
+  "Tarn",
+  "Tarn-et-Garonne",
+  "Var",
+  "Vaucluse",
+  "Vendée",
+  "Vienne",
+  "Haute-Vienne",
+  "Vosges",
+  "Yonne",
+  "Territoire de Belfort",
+  "Essonne",
+  "Hauts-de-Seine",
+  "Seine-St-Denis",
+  "Val-de-Marne",
+  "Val-D'Oise",
+  "Guadeloupe",
+  "Martinique",
+  "Guyane",
+  "La Réunion",
+  "Mayotte"
+]
 
 # USER
 10.times do
@@ -70,20 +170,12 @@ i=0
   i+=1
 end
 
-# COUNTRY
-3.times do
-  Country.create(
-  name: Faker::Address.country 
-  )
-end
 
 # LOCATION
-3.times do
+
+french_departments.sort{|a,b| a <=> b }.each do |department|
   Location.create(
-    name: Faker::Address.city,
-    lat: Faker::Address.latitude,
-    long: Faker::Address.longitude,
-    country: Country.all.sample
+    name: department
   )
 end
 

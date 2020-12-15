@@ -36,7 +36,6 @@ class Api::GardensController < ApplicationController
       "comments" => @garden.garden_comments,
       "climate" => @garden.climate,
       "location" => @garden.location,
-      "country" => @garden.location.country,
       "likes" => @garden.garden_likes,
       "picture_url" => @garden.picture_url,
       "picture_opacity" => @garden.picture_opacity
