@@ -9,35 +9,6 @@ class Api::UsersController < Api::BaseController
   end
 
   def show
-    @posts = Array.new
-    @follows = Array.new
-    @user.gardens.each do |garden|
-      @posts << garden.posts
-    end
-
-    if current_user && current_user.follows.length <= 10
-      @follows = new_user_feed
-    else
-      @follows = news_feed_sort
-    end
-
-    if params[:follows_page]
-      index1 = params[:follows_page].to_i * 10 - 10
-      index2 = index1 + 9
-      @follows = @follows[index1..index2]
-    else
-      @follows = @follows[0..9]
-    end
-
-    @selected_users = users_selection
-
-    if params[:selected_users_page]
-      index1 = params[:selected_users_page].to_i * 10 - 10
-      index2 = index1 + 9
-      @selected_users = @selected_users[index1..index2]
-    else
-      @selected_users = @selected_users[0..9]
-    end
 
     render json: {
       "user" => @user,
@@ -46,8 +17,8 @@ class Api::UsersController < Api::BaseController
       "post_comments" => @user.post_comments,
       "garden_comments" => @user.garden_comments,
       "testimonies" => @user.testimonies,
-      "follows" => @follows,
-      "selected_users" => @selected_users,
+      "follows" => @user.follows,
+      "selected_users" => User.limit(10).order(:created_at),
       "avatar" => @user.avatar_url,
     }
   end
