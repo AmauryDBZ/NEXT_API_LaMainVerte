@@ -18,7 +18,7 @@ class Garden < ApplicationRecord
   def self.filter(params)
     
     if (params.keys.length() > 2)
-      int_params = ["user_id", "location_id", "climate_id", "garden_type_id"]
+      int_params = ["user_id", "location_id", "climate_id", "garden_type_id", "tag_id"]
       like_params = ["description", "name"]
       query_parts = []
 
