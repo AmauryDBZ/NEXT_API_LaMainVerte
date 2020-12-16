@@ -7,10 +7,11 @@ class Api::GardensController < ApplicationController
   def index
     if params[:user_id]
       @gardens = User.find(params[:user_id]).gardens
+    elsif params[:tag_id]
+      @gardens = Garden.filterByTagid(params)
     else
-      @gardens = Garden.all
+      @gardens = Garden.filterByGardenAttributes(params)
     end
-
     render json: @gardens
   end
 
@@ -23,7 +24,6 @@ class Api::GardensController < ApplicationController
         @followers << follow.user
       end
     end
-
 
     render json: {
       "garden" => @garden,
@@ -38,7 +38,7 @@ class Api::GardensController < ApplicationController
       "location" => @garden.location,
       "likes" => @garden.garden_likes,
       "picture_url" => @garden.picture_url,
-      "picture_opacity" => @garden.picture_opacity
+      "picture_opacity" => @garden.picture_opacity,
     }
   end
 
@@ -46,7 +46,7 @@ class Api::GardensController < ApplicationController
   def create
     @garden = Garden.new(garden_params)
     @garden.user_id = current_user.id
-    
+
     if @garden.save
       render json: @garden, status: :created, location: @api_garden
     else
@@ -69,21 +69,22 @@ class Api::GardensController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_garden
-      @garden = Garden.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def garden_params
-      params.require(:garden).permit(:area, :location_id, :climate_id, :garden_type_id, :name, :picture_opacity, :picture_url, :description, :warning)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_garden
+    @garden = Garden.find(params[:id])
+  end
 
-    def is_owner_or_admin
-      if current_user.is_admin || current_user.id == @garden.user_id
-        return true
-      else
-        render json: {error: "You cannot edit/delete a garden if you are not the owner or an administrator."}, status: :unauthorized
-      end
+  # Only allow a trusted parameter "white list" through.
+  def garden_params
+    params.require(:garden).permit(:area, :location_id, :climate_id, :garden_type_id, :name, :picture_opacity, :picture_url, :description, :warning)
+  end
+
+  def is_owner_or_admin
+    if current_user.is_admin || current_user.id == @garden.user_id
+      return true
+    else
+      render json: { error: "You cannot edit/delete a garden if you are not the owner or an administrator." }, status: :unauthorized
     end
+  end
 end
