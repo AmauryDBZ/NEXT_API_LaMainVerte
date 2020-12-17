@@ -5,13 +5,13 @@ class User < ApplicationRecord
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
   # ASSOCIATIONS
-  has_many :gardens
-  has_many :follows
-  has_many :post_comments
-  has_many :garden_comments
-  has_many :testimonies
-  has_many :post_likes
-  has_many :garden_likes
+  has_many :gardens, dependent: :destroy
+  has_many :follows, dependent: :destroy
+  has_many :post_comments, dependent: :destroy
+  has_many :garden_comments, dependent: :destroy
+  has_many :testimonies, dependent: :destroy
+  has_many :post_likes, dependent: :destroy
+  has_many :garden_likes, dependent: :destroy
 
   # VALIDATIONS
   validates :email, :first_name, :last_name, :username,
