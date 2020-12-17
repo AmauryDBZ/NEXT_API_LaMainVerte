@@ -19,9 +19,9 @@ class Garden < ApplicationRecord
     if (params.keys.length() > 2)
       query_string = self.parseQueryStringToQuery(params)
 
-      return Garden.where(query_string)
+      return Garden.where(query_string).limit(20)
     else
-      return Garden.all
+      return Garden.all.limit(10)
     end
   end
 
