@@ -47,7 +47,7 @@ class Api::PostCommentsController < ApplicationController
 
   # PATCH/PUT /post_comments/1
   def update
-    if @post_comment.update(post_comment_params)
+    if @post_comment.update(put_comment_params)
       render json: @post_comment
     else
       render json: @post_comment.errors, status: :unprocessable_entity
@@ -67,6 +67,10 @@ class Api::PostCommentsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def post_comment_params
+      params.require(:post_comment).permit(:content)
+    end
+
+    def put_comment_params 
       if current_user.id != @post_comment.user_id
         params.require(:post_comment).permit(:warning)
       else
