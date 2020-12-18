@@ -1,7 +1,7 @@
 class Api::PostCommentsController < ApplicationController
   before_action :set_post_comment, only: [:show, :update, :destroy]
   before_action :authenticate_user!, only: [:create, :update, :destroy]
-  before_action :is_owner_or_admin, only: [:destroy, :update]
+  before_action :is_owner_or_admin, only: [:destroy]
 
   # GET /post_comments
   def index
@@ -67,7 +67,11 @@ class Api::PostCommentsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def post_comment_params
-      params.require(:post_comment).permit(:content, :warning)
+      if current_user.id != @post_comment.user_id
+        params.require(:post_comment).permit(:warning)
+      else
+        params.require(:post_comment).permit(:content, :warning)
+      end
     end
 
     def is_owner_or_admin
