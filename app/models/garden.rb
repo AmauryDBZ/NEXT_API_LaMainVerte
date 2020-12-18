@@ -14,9 +14,6 @@ class Garden < ApplicationRecord
 
   # VALIDATIONS
   validates :name, presence: true
-  validates :description, presence: true
-  validates :location, presence: true
-
 
   def self.filterByGardenAttributes(params)
     if (params.keys.length() > 2)
