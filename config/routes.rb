@@ -34,9 +34,10 @@ Rails.application.routes.draw do
     end
 
     resources :users do 
-      resources :gardens,  only: [:create]
+      resources :gardens, only: [:create]
     end
-
+  end
+  
   devise_for :users,
     defaults: { format: :json },
     path: '',
