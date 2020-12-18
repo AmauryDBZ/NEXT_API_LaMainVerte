@@ -1,8 +1,7 @@
 class Api::PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
   before_action :authenticate_user!, only: [:create, :update, :destroy]
-  before_action :is_owner_or_admin, only: [:destroy, :update]
-
+  before_action :is_owner_or_admin, only: [:destroy]
   # GET /posts
   def index
     if params[:user_id] && params[:garden_id]
@@ -68,7 +67,11 @@ class Api::PostsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def post_params
-      params.require(:post).permit(:title, :content, :warning, pictures_url: [ ])
+      if current_user.id != @post.garden.user_id 
+        params.require(:post).permit(:warning)
+      else
+        params.require(:post).permit(:title, :content, :warning, pictures_url: [ ])
+      end
     end
 
     def is_owner_or_admin
