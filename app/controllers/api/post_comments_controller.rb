@@ -1,7 +1,7 @@
 class Api::PostCommentsController < ApplicationController
   before_action :set_post_comment, only: [:show, :update, :destroy]
   before_action :authenticate_user!, only: [:create, :update, :destroy]
-  before_action :is_owner_or_admin, only: [:destroy, :update]
+  before_action :is_owner_or_admin, only: [:destroy]
 
   # GET /post_comments
   def index
