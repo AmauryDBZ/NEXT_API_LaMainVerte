@@ -47,7 +47,7 @@ class Api::PostsController < ApplicationController
 
   # PATCH/PUT /posts/1
   def update
-    if @post.update(post_params)
+    if @post.update(put_params)
       render json: @post
     else
       render json: @post.errors, status: :unprocessable_entity
@@ -67,6 +67,10 @@ class Api::PostsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def post_params
+      params.require(:post).permit(:title, :content, :warning, pictures_url: [ ])
+    end
+
+    def put_params
       if current_user.id != @post.garden.user_id 
         params.require(:post).permit(:warning)
       else

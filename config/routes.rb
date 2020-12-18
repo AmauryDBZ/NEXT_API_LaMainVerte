@@ -6,9 +6,8 @@ Rails.application.routes.draw do
     
     get '/upload', to: 's3_uploads#set_s3_direct_post'
 
-    resources :testimonies
-    resources :follows
-    resources :countries
+    resources :testimonies, except: [:update]
+    resources :follows, except: [:update, :index]
     resources :locations
     resources :climates
     resources :garden_types
@@ -22,43 +21,21 @@ Rails.application.routes.draw do
     resources :post_likes, except: [:update]
     resources :garden_likes, except: [:update]
     resources :admins, only: [:index]
-    get '/upload', to: 's3_uploads#set_s3_direct_post'
 
     resources :posts do
-      resources :post_comments
-      resources :tags
-      resources :post_tags
+      resources :post_comments, only: [:create]
+      resources :post_tags, only: [:create]
     end
 
     resources :gardens  do
-      resources :garden_comments
-      resources :garden_tags
-      resources :events
-      resources :posts do
-        resources :tags
-        resources :post_comments
-      end
+      resources :garden_comments, only: [:create]
+      resources :garden_tags, only: [:create]
+      resources :events, only: [:create]
     end
 
     resources :users do 
-      resources :gardens do
-        resources :tags
-        resources :garden_types
-        resources :events
-        resources :countries
-        resources :locations
-        resources :climates
-        resources :follows
-        resources :garden_tags
-      end
-      resources :posts do
-        resources :tags
-        resources :post_comments
-      end
-      resources :testimonies
-      resources :follows
+      resources :gardens,  only: [:create]
     end
-  end
 
   devise_for :users,
     defaults: { format: :json },
