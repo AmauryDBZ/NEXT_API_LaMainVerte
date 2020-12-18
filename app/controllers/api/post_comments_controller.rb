@@ -66,11 +66,11 @@ class Api::PostCommentsController < ApplicationController
     end
 
     # Only allow a trusted parameter "white list" through.
-    def post_params
+    def post_comment_params
       if current_user.id != @post_comment.user_id
-        params.require(:post).permit(:warning)
+        params.require(:post_comment).permit(:warning)
       else
-        params.require(:post).permit(:content, :warning)
+        params.require(:post_comment).permit(:content, :warning)
       end
     end
 
