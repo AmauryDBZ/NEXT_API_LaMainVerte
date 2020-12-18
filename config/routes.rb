@@ -31,13 +31,14 @@ Rails.application.routes.draw do
       resources :garden_comments, only: [:create]
       resources :garden_tags, only: [:create]
       resources :events, only: [:create]
+      resources :posts, only: [:create]
     end
 
     resources :users do 
       resources :gardens, only: [:create]
     end
   end
-  
+
   devise_for :users,
     defaults: { format: :json },
     path: '',
